@@ -1,0 +1,19 @@
+# Centralized Configuration for Service Registry
+# This file is served by Config Server to Eureka Server
+
+server:
+  port: 8761  # Standard Eureka port
+
+spring:
+  application:
+    name: service-registry  # Service name
+
+# Eureka Server Configuration
+eureka:
+  instance:
+    hostname: localhost  # Server hostname
+  client:
+    register-with-eureka: false  # Don't register with itself
+    fetch-registry: false        # Don't fetch registry
+    service-url:
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/

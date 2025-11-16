@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Logback Configuration for Payment Service -->
+<!-- This configuration sets up structured logging for ELK stack integration -->
+<configuration>
+    <!-- Include default Spring Boot logging configuration -->
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    
+    <!-- Console Appender - Logs to console with JSON format -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- JSON encoder for structured logging -->
+        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+            <providers>
+                <timestamp/>      <!-- Log timestamp -->
+                <logLevel/>       <!-- Log level (INFO, ERROR, etc.) -->
+                <loggerName/>     <!-- Logger class name -->
+                <mdc/>           <!-- Mapped Diagnostic Context (includes trace/span IDs) -->
+                <message/>       <!-- Log message -->
+            </providers>
+        </encoder>
+    </appender>
+    
+    <!-- File Appender - Logs to file with JSON format for ELK processing -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/payment-service.log</file>  <!-- Log file location -->
+        <!-- JSON encoder for ELK stack compatibility -->
+        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+            <providers>
+                <timestamp/>      <!-- Log timestamp -->
+                <logLevel/>       <!-- Log level -->
+                <loggerName/>     <!-- Logger class name -->
+                <mdc/>           <!-- Trace/Span IDs for correlation -->
+                <message/>       <!-- Log message -->
+            </providers>
+        </encoder>
+        <!-- Rolling policy - Create new log file daily -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/payment-service.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>7</maxHistory>  <!-- Keep logs for 7 days -->
+        </rollingPolicy>
+    </appender>
+    
+    <!-- Root logger configuration -->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>  <!-- Log to console -->
+        <appender-ref ref="FILE"/>     <!-- Log to file -->
+    </root>
+</configuration>

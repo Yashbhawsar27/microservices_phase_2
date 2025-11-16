@@ -1,37 +1,51 @@
+# Payment Service Configuration
+# This service handles payment processing for orders
+
 server:
-  port: 8082
+  port: 8082  # Payment service runs on port 8082
 
 spring:
   application:
-    name: payment-service
-  config:
-    import: configserver:http://localhost:8888
+    name: payment-service  # Service name for Eureka registration
+  # H2 In-Memory Database Configuration
   datasource:
-    url: jdbc:h2:file:./data/paymentdb
-    driver-class-name: org.h2.Driver
-    username: sa
-    password:
-  jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: true
+    url: jdbc:h2:mem:paymentdb  # Separate in-memory database for payments
+    driver-class-name: org.h2.Driver  # H2 database driver
+    username: sa  # Default username
+    password:     # Empty password for learning
   h2:
     console:
-      enabled: true
-      path: /h2-console
+      enabled: true  # Enable H2 web console for database viewing
+  # JPA/Hibernate Configuration
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect  # H2 dialect
+    hibernate:
+      ddl-auto: create-drop  # Recreate tables on each restart
 
+# Eureka Client Configuration
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka
-  instance:
-    prefer-ip-address: true
+      defaultZone: http://localhost:8761/eureka/  # Eureka server URL
 
+# Management and Monitoring Configuration
 management:
   endpoints:
     web:
       exposure:
-        include: "*"
-  endpoint:
-    health:
-      show-details: always
+        include: health,info  # Expose basic endpoints
+  # Distributed Tracing Configuration
+  tracing:
+    sampling:
+      probability: 1.0  # Sample 100% of requests for learning
+  zipkin:
+    tracing:
+      endpoint: http://localhost:9411/api/v2/spans  # Zipkin server endpoint
+
+# Logging Configuration
+logging:
+  level:
+    com.java.payment.api: INFO  # Set log level for payment service
+  pattern:
+    # Include trace and span IDs in log pattern for correlation
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%X{traceId:-},%X{spanId:-}] %-5level %logger{36} - %msg%n"

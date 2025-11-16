@@ -1,33 +1,47 @@
+# Centralized Configuration for Payment Service
+# This file is served by Config Server to Payment Service
+
 server:
-  port: 8082
+  port: 8082  # Payment service port
 
 spring:
+  # H2 Database Configuration
   datasource:
-    url: jdbc:h2:file:./data/paymentdb
+    url: jdbc:h2:mem:paymentdb  # Separate database for payments
     driver-class-name: org.h2.Driver
     username: sa
-    password:
-  jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: true
+    password: 
   h2:
     console:
-      enabled: true
-      path: /h2-console
+      enabled: true  # Enable H2 console for database viewing
+  # JPA Configuration
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create-drop  # Recreate schema on restart
 
+# Service Discovery Configuration
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka
-  instance:
-    prefer-ip-address: true
+      defaultZone: http://localhost:8761/eureka/
 
+# Monitoring and Tracing Configuration
 management:
   endpoints:
     web:
       exposure:
-        include: "*"
-  endpoint:
-    health:
-      show-details: always
+        include: health,info  # Basic endpoints
+  tracing:
+    sampling:
+      probability: 1.0  # 100% sampling for learning
+  zipkin:
+    tracing:
+      endpoint: http://localhost:9411/api/v2/spans
+
+# Logging Configuration
+logging:
+  level:
+    com.java.payment.api: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%X{traceId:-},%X{spanId:-}] %-5level %logger{36} - %msg%n"

@@ -1,42 +1,47 @@
+# Centralized Configuration for Order Service
+# This file is served by Config Server to Order Service
+
 server:
-  port: 8081
+  port: 8081  # Order service port
 
 spring:
+  # H2 Database Configuration
   datasource:
-    url: jdbc:h2:file:./data/orderdb
+    url: jdbc:h2:mem:testdb  # In-memory database for learning
     driver-class-name: org.h2.Driver
     username: sa
-    password:
-  jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: true
+    password: 
   h2:
     console:
-      enabled: true
-      path: /h2-console
+      enabled: true  # Enable H2 console for database viewing
+  # JPA Configuration
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create-drop  # Recreate schema on restart
 
+# Service Discovery Configuration
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka
-  instance:
-    prefer-ip-address: true
+      defaultZone: http://localhost:8761/eureka/
 
+# Monitoring and Tracing Configuration
 management:
   endpoints:
     web:
       exposure:
-        include: "*"
-  endpoint:
-    health:
-      show-details: always
+        include: health,info  # Basic endpoints
+  tracing:
+    sampling:
+      probability: 1.0  # 100% sampling for learning
+  zipkin:
+    tracing:
+      endpoint: http://localhost:9411/api/v2/spans
 
-resilience4j:
-  circuitbreaker:
-    instances:
-      payment-service:
-        sliding-window-size: 5
-        minimum-number-of-calls: 3
-        failure-rate-threshold: 50
-        wait-duration-in-open-state: 5000ms
+# Logging Configuration
+logging:
+  level:
+    com.java.order.api: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%X{traceId:-},%X{spanId:-}] %-5level %logger{36} - %msg%n"

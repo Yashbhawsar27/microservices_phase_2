@@ -2,48 +2,72 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+	
+	<!-- Spring Boot Parent - Provides dependency management and default configurations -->
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>3.5.7</version>
 		<relativePath/>
 	</parent>
+	
+	<!-- Project Information -->
 	<groupId>com.java</groupId>
 	<artifactId>cloud-gateway</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>cloud-gateway</name>
-	<description>Spring Cloud Gateway</description>
+	<description>Spring Cloud Gateway - API Gateway for routing and load balancing</description>
 	
+	<!-- Java and Spring Cloud Versions -->
 	<properties>
 		<java.version>17</java.version>
 		<spring-cloud.version>2023.0.3</spring-cloud.version>
 	</properties>
 	
 	<dependencies>
+		<!-- Spring Cloud Gateway - API Gateway with routing and filtering -->
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-gateway</artifactId>
 		</dependency>
+		
+		<!-- Eureka Client - Service discovery for dynamic routing -->
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
 		</dependency>
+		
+		<!-- Circuit Breaker - Reactive fault tolerance with Resilience4j -->
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-circuitbreaker-reactor-resilience4j</artifactId>
 		</dependency>
+		
+		<!-- Config Client - Fetch configuration from config server -->
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-config</artifactId>
 		</dependency>
+		
+		<!-- Actuator - Health checks and monitoring endpoints -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
+		
+		<!-- Micrometer Tracing - Distributed tracing with Brave -->
 		<dependency>
 			<groupId>io.micrometer</groupId>
-			<artifactId>micrometer-registry-prometheus</artifactId>
+			<artifactId>micrometer-tracing-bridge-brave</artifactId>
 		</dependency>
+		
+		<!-- Zipkin Reporter - Send trace data to Zipkin server -->
+		<dependency>
+			<groupId>io.zipkin.reporter2</groupId>
+			<artifactId>zipkin-reporter-brave</artifactId>
+		</dependency>
+		
+		<!-- Logstash Encoder - JSON structured logging for ELK stack -->
 		<dependency>
 			<groupId>net.logstash.logback</groupId>
 			<artifactId>logstash-logback-encoder</artifactId>
@@ -51,6 +75,7 @@
 		</dependency>
 	</dependencies>
 	
+	<!-- Spring Cloud Dependency Management -->
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -63,8 +88,10 @@
 		</dependencies>
 	</dependencyManagement>
 	
+	<!-- Build Configuration -->
 	<build>
 		<plugins>
+			<!-- Spring Boot Maven Plugin - For packaging and running the application -->
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>

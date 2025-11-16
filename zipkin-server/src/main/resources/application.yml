@@ -1,0 +1,16 @@
+# Zipkin Distributed Tracing Server Configuration
+# This service collects and visualizes trace data from all microservices
+
+server:
+  port: 9411  # Standard Zipkin server port
+
+spring:
+  application:
+    name: zipkin-server  # Service name
+
+# Management Endpoints Configuration
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info  # Expose basic health and info endpoints

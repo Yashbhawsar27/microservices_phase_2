@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- Project Information -->
+    <groupId>com.microservices</groupId>
+    <artifactId>zipkin-server</artifactId>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
+    <name>zipkin-server</name>
+    <description>Zipkin Distributed Tracing Server - Collects and visualizes trace data</description>
+
+    <!-- Spring Boot Parent - Provides dependency management -->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.5.7</version>
+        <relativePath/>
+    </parent>
+
+    <!-- Java and Spring Cloud Versions -->
+    <properties>
+        <java.version>17</java.version>
+        <spring-cloud.version>2023.0.3</spring-cloud.version>
+    </properties>
+
+    <dependencies>
+        <!-- Spring Boot Web - Basic web functionality -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        
+        <!-- Zipkin Server - Core tracing server functionality -->
+        <dependency>
+            <groupId>io.zipkin</groupId>
+            <artifactId>zipkin-server</artifactId>
+            <version>3.4.0</version>
+        </dependency>
+        
+        <!-- Zipkin UI - Web interface for viewing traces -->
+        <dependency>
+            <groupId>io.zipkin</groupId>
+            <artifactId>zipkin-autoconfigure-ui</artifactId>
+            <version>3.4.0</version>
+        </dependency>
+    </dependencies>
+
+    <!-- Build Configuration -->
+    <build>
+        <plugins>
+            <!-- Spring Boot Maven Plugin - For packaging and running the application -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+</project>

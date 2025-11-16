@@ -1,30 +1,38 @@
+# Config Server Configuration
+# This service provides centralized configuration management for all microservices
+
 server:
-  port: 8888
+  port: 8888  # Config Server runs on port 8888
 
 spring:
   application:
-    name: config-server
+    name: config-server  # Service name for Eureka registration
   cloud:
     config:
       server:
+        # Native Profile - Serves configs from local classpath
         native:
-          search-locations: classpath:/config-files/
+          search-locations: classpath:/config-files/  # Local config files location
+        # Git Profile - Serves configs from GitHub repository
         git:
-          uri: https://github.com/Yashbhawsar27/cloud-config-server.git
-          clone-on-start: true
-          default-label: main
+          uri: https://github.com/Yashbhawsar27/microservices_phase_2.git  # GitHub repo URL
+          search-paths: cloud-config-server  # Folder path in repo containing configs
+          clone-on-start: true  # Clone repository on startup
+          default-label: main   # Default branch to use
   profiles:
-    active: native
+    active: native  # Default profile - Change to 'git' to use GitHub configs
 
+# Eureka Client Configuration
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: http://localhost:8761/eureka  # Eureka server URL
   instance:
-    prefer-ip-address: true
+    prefer-ip-address: true  # Use IP address instead of hostname
 
+# Management Endpoints Configuration
 management:
   endpoints:
     web:
       exposure:
-        include: "*"
+        include: health,info  # Expose health and info endpoints only
